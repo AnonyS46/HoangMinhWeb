@@ -33,7 +33,7 @@
 <link href="../public/css/style.css" rel="stylesheet">
 	<style>
 		#setImage img {
-			width: 80%;
+			width: 100%;
 		}
 	</style>
 </head>
@@ -97,7 +97,8 @@
 							href="/tour/trong-nuoc" class="nav-item nav-link">Tour trong
 							nước</a> <a href="/tour/ngoai-nuoc" class="nav-item nav-link">Tour
 							ngoài nước</a> <a href="/tin-tuc" class="nav-item nav-link">Tin
-							tức</a> <a href="/lien-he" class="nav-item nav-link">Liên hệ</a> <a
+							tức</a> <a href="/about" class="nav-item nav-link">Về chúng tôi</a>
+						<a
 							href="/account" class="nav-item nav-link">Tài khoản</a>
 					</div>
 				</div>
@@ -135,12 +136,22 @@
 					<!-- Blog Detail Start -->
 					<div class="pb-3">
 						<div class="blog-item">
-							<div class="position-relative">
-								<img class="img-fluid w-100" th:src="${tour.anh_tour}" alt="">
-								<div class="blog-date">
-									<h6 class="font-weight-bold mb-n1">01</h6>
-									<small class="text-white text-uppercase">Jan</small>
+							<div id="header-carousel" class="carousel slide" data-ride="carousel">
+								<div class="carousel-inner">
+									<div th:each="image, iterStat : ${imageList}" class="carousel-item" th:classappend="${iterStat.index == 0} ? 'active' : ''">
+										<img class="w-100" style="height: 420px" th:src="'/public/img/' + ${image.url}" alt="Image">
+									</div>
 								</div>
+								<a class="carousel-control-prev" href="#header-carousel" data-slide="prev">
+									<div class="btn btn-dark" style="width: 45px; height: 45px;">
+										<span class="carousel-control-prev-icon mb-n2"></span>
+									</div>
+								</a>
+								<a class="carousel-control-next" href="#header-carousel" data-slide="next">
+									<div class="btn btn-dark" style="width: 45px; height: 45px;">
+										<span class="carousel-control-next-icon mb-n2"></span>
+									</div>
+								</a>
 							</div>
 						</div>
 						<div class="bg-white mb-3" style="padding: 30px;">
@@ -154,94 +165,12 @@
 						</div>
 					</div>
 					<!-- Blog Detail End -->
-
-					<!-- Comment List Start -->
-					<div class="bg-white" style="padding: 30px; margin-bottom: 30px;">
-						<h4 class="text-uppercase mb-4" style="letter-spacing: 5px;">3
-							Comments</h4>
-						<div class="media mb-4">
-							<img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1"
-								style="width: 45px;">
-							<div class="media-body">
-								<h6>
-									<a href="">John Doe</a> <small><i>01 Jan 2045</i></small>
-								</h6>
-								<p>Diam amet duo labore stet elitr invidunt ea clita ipsum
-									voluptua, tempor labore accusam ipsum et no at. Kasd diam
-									tempor rebum magna dolores sed sed eirmod ipsum. Gubergren
-									clita aliquyam consetetur sadipscing, at tempor amet ipsum diam
-									tempor consetetur at sit.</p>
-								<button class="btn btn-sm btn-outline-primary">Reply</button>
-							</div>
-						</div>
-						<div class="media">
-							<img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1"
-								style="width: 45px;">
-							<div class="media-body">
-								<h6>
-									<a href="">John Doe</a> <small><i>01 Jan 2045</i></small>
-								</h6>
-								<p>Diam amet duo labore stet elitr invidunt ea clita ipsum
-									voluptua, tempor labore accusam ipsum et no at. Kasd diam
-									tempor rebum magna dolores sed sed eirmod ipsum. Gubergren
-									clita aliquyam consetetur sadipscing, at tempor amet ipsum diam
-									tempor consetetur at sit.</p>
-								<button class="btn btn-sm btn-outline-primary">Reply</button>
-								<div class="media mt-4">
-									<img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1"
-										style="width: 45px;">
-									<div class="media-body">
-										<h6>
-											<a href="">John Doe</a> <small><i>01 Jan 2045</i></small>
-										</h6>
-										<p>Diam amet duo labore stet elitr invidunt ea clita ipsum
-											voluptua, tempor labore accusam ipsum et no at. Kasd diam
-											tempor rebum magna dolores sed sed eirmod ipsum. Gubergren
-											clita aliquyam consetetur sadipscing, at tempor amet ipsum
-											diam tempor consetetur at sit.</p>
-										<button class="btn btn-sm btn-outline-primary">Reply</button>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- Comment List End -->
-
-					<!-- Comment Form Start -->
-					<div class="bg-white mb-3" style="padding: 30px;">
-						<h4 class="text-uppercase mb-4" style="letter-spacing: 5px;">Leave
-							a comment</h4>
-						<form>
-							<div class="form-group">
-								<label for="name">Name *</label> <input type="text"
-									class="form-control" id="name">
-							</div>
-							<div class="form-group">
-								<label for="email">Email *</label> <input type="email"
-									class="form-control" id="email">
-							</div>
-							<div class="form-group">
-								<label for="website">Website</label> <input type="url"
-									class="form-control" id="website">
-							</div>
-
-							<div class="form-group">
-								<label for="message">Message *</label>
-								<textarea id="message" cols="30" rows="5" class="form-control"></textarea>
-							</div>
-							<div class="form-group mb-0">
-								<input type="submit" value="Leave a comment"
-									class="btn btn-primary font-weight-semi-bold py-2 px-3">
-							</div>
-						</form>
-					</div>
-					<!-- Comment Form End -->
 				</div>
 
 				<div class="col-lg-4 mt-5 mt-lg-0">
 					<!-- Author Bio -->
 					<form  th:action="@{/tour/booking/{id}(id=${tour.id})}" method="GET" class="d-flex flex-column text-center bg-white mb-5 py-5 px-4">
-						<img th:src="${tour.anh_tour}" class="img-fluid mx-auto mb-3"
+						<img th:src="'/public/img/' + ${tour.anh_tour}" class="img-fluid mx-auto mb-3"
 							style="width: 100px;">
 						<h3 class="text-primary mb-3" th:text="${tour.ten_tour}"></h3>
 						<p th:text="${tour.gioi_thieu_tour}">Conset elitr erat vero
@@ -260,51 +189,6 @@
 						<h5 class="text-danger mt-4 mb-2" id="tong_tien">Tông tiền : 15.000.000 đ</h5>
 						<button type="submit" class="btn btn-primary py-md-3 px-md-5 mt-2">Đặt tour ngay</button>
 					</form>
-
-					<!-- Recent Post -->
-					<div class="mb-5">
-						<h4 class="text-uppercase mb-4" style="letter-spacing: 5px;">Tour
-							liên quan</h4>
-						<a
-							class="d-flex align-items-center text-decoration-none bg-white mb-3"
-							href=""> <img class="img-fluid" src="img/blog-100x100.jpg"
-							alt="">
-							<div class="pl-3">
-								<h6 class="m-1">Diam lorem dolore justo eirmod lorem dolore</h6>
-								<small>Jan 01, 2050</small>
-							</div>
-						</a> <a
-							class="d-flex align-items-center text-decoration-none bg-white mb-3"
-							href=""> <img class="img-fluid" src="img/blog-100x100.jpg"
-							alt="">
-							<div class="pl-3">
-								<h6 class="m-1">Diam lorem dolore justo eirmod lorem dolore</h6>
-								<small>Jan 01, 2050</small>
-							</div>
-						</a> <a
-							class="d-flex align-items-center text-decoration-none bg-white mb-3"
-							href=""> <img class="img-fluid" src="img/blog-100x100.jpg"
-							alt="">
-							<div class="pl-3">
-								<h6 class="m-1">Diam lorem dolore justo eirmod lorem dolore</h6>
-								<small>Jan 01, 2050</small>
-							</div>
-						</a>
-					</div>
-
-					<!-- Tag Cloud -->
-					<div class="mb-5">
-						<h4 class="text-uppercase mb-4" style="letter-spacing: 5px;">Tag
-							Cloud</h4>
-						<div class="d-flex flex-wrap m-n1">
-							<a href="" class="btn btn-light m-1">Design</a> <a href=""
-								class="btn btn-light m-1">Development</a> <a href=""
-								class="btn btn-light m-1">Marketing</a> <a href=""
-								class="btn btn-light m-1">SEO</a> <a href=""
-								class="btn btn-light m-1">Writing</a> <a href=""
-								class="btn btn-light m-1">Consulting</a>
-						</div>
-					</div>
 				</div>
 			</div>
 		</div>

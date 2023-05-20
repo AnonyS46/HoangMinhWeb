@@ -38,7 +38,6 @@ public class User {
 	private String email;
 	
 	private String dia_chi;
-	
-	
+
 	private Integer role;
 }

@@ -66,7 +66,7 @@ public class HomeController {
 	}
 
 	@GetMapping("/tour/trong-nuoc")
-	ModelAndView tourTrongNuoc(@RequestParam(value = "page", required = false, defaultValue = "10") Integer page,
+	ModelAndView tourTrongNuoc(@RequestParam(value = "page", required = false, defaultValue = "1") Integer pageIndex,
 							   @RequestParam(value = "ten_tour", required = false) String ten_tour,
 							   @RequestParam(value = "gia_tour", required = false) Long gia_tour,
 							   @RequestParam(value = "ngay_khoi_hanh", required = false) String ngay_khoi_hanh) {
@@ -89,7 +89,7 @@ public class HomeController {
 		}
 
 		Page<TourDTO> tourPage = this.tourService.findAllTour(ten_tour, gia_tour_from, gia_tour_to,
-				ngay_khoi_hanh_value, 1, PageRequest.of(0, 10));
+				ngay_khoi_hanh_value, 1, PageRequest.of(pageIndex-1, 12));
 
 		List<TourDTO> tours = tourPage.getContent();
 
@@ -98,7 +98,7 @@ public class HomeController {
 	}
 
 	@GetMapping("/tour/ngoai-nuoc")
-	ModelAndView tourNgoaiNuoc(@RequestParam(value = "page", required = false, defaultValue = "10") Integer page,
+	ModelAndView tourNgoaiNuoc(@RequestParam(value = "page", required = false, defaultValue = "1") Integer pageIndex,
 							   @RequestParam(value = "ten_tour", required = false) String ten_tour,
 							   @RequestParam(value = "gia_tour", required = false) Long gia_tour,
 							   @RequestParam(value = "ngay_khoi_hanh", required = false) String ngay_khoi_hanh) {
@@ -108,7 +108,7 @@ public class HomeController {
 		if (gia_tour != null) {
 			gia_tour_from = gia_tour == 0 ? null : (gia_tour == 1 ? 0 : (gia_tour == 2 ? 10000000l : 50000000l));
 
-			gia_tour_to = gia_tour == 0 ? null : (gia_tour == 1 ? 10000000l : (gia_tour == 2 ? 50000000l : 500000000));
+			gia_tour_to = gia_tour == 0 ? null : (gia_tour == 1 ? 10000000l : (gia_tour == 2 ? 50000000l : 500000000l));
 		}
 
 		DateFormat format = new SimpleDateFormat("MM/dd/yyyy");
@@ -123,7 +123,7 @@ public class HomeController {
 		ModelAndView mdv = new ModelAndView("user/tour2");
 
 		Page<TourDTO> tourPage = this.tourService.findAllTour(ten_tour, gia_tour_from, gia_tour_to, ngay_khoi_hanh_value, 2,
-				PageRequest.of(0, 10));
+				PageRequest.of(pageIndex-1, 12));
 
 		List<TourDTO> tours = tourPage.getContent();
 
@@ -352,6 +352,12 @@ public class HomeController {
 		return mdv;
 	}
 
+
+	@GetMapping("/error")
+	public String error() {
+		return "user/error";
+	}
+
 	@GetMapping("/user/tour")
 	ModelAndView userTour(){
 
@@ -415,6 +421,16 @@ public class HomeController {
 		}
 
 		return new ModelAndView("redirect:/user/tour" );
+	}
+
+	@GetMapping("/about")
+	public String about() {
+		return "/user/about";
+	}
+
+	@GetMapping("/tin-tuc")
+	public String news() {
+		return "/user/tin-tuc";
 	}
 
 }

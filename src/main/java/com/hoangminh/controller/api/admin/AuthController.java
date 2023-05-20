@@ -23,7 +23,6 @@ public class AuthController {
 		if(this.userService.adminLogin(info)) {
 			return new ResponseDTO("Thành công", SessionUtilities.getAdmin());
 		}
-
 		return new ResponseDTO("Thông tin đăng nhập không hợp lệ", null);
 	}
 

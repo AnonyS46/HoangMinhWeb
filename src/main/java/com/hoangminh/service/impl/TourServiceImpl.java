@@ -2,6 +2,7 @@ package com.hoangminh.service.impl;
 
 import java.util.*;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +22,7 @@ import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-
+@Slf4j
 @Service
 public class TourServiceImpl implements TourService {
 
@@ -32,6 +33,12 @@ public class TourServiceImpl implements TourService {
 	@Override
 	public Page<TourDTO> findAllTour(String ten_tour,Long gia_tour_from,Long gia_tour_to,Date ngay_khoi_hanh,Integer loai_tour,Pageable pageable) {
 		Page<TourDTO> page = this.tourRepository.findAll(ten_tour, gia_tour_from, gia_tour_to,ngay_khoi_hanh, loai_tour, pageable);
+		return page;
+	}
+
+	@Override
+	public Page<TourDTO> findAllTourAdmin(String ten_tour,Long gia_tour_from,Long gia_tour_to,Date ngay_khoi_hanh,Integer loai_tour,Pageable pageable) {
+		Page<TourDTO> page = this.tourRepository.findAllAdmin(ten_tour, gia_tour_from, gia_tour_to,ngay_khoi_hanh, loai_tour, pageable);
 		return page;
 	}
 
@@ -77,7 +84,6 @@ public class TourServiceImpl implements TourService {
 		tour.setLoai_tour(tourDTO.getLoai_tour());
 		tour.setGia_tour(tourDTO.getGia_tour());
 		tour.setGioi_thieu_tour(tourDTO.getGioi_thieu_tour());
-		tour.setAnh_tour(tourDTO.getAnh_tour());
 		tour.setDiem_den(tourDTO.getDiem_den());
 		tour.setNoi_dung_tour(tourDTO.getNoi_dung_tour());
 		tour.setDiem_khoi_hanh(tourDTO.getDiem_khoi_hanh());
@@ -92,15 +98,17 @@ public class TourServiceImpl implements TourService {
 	@Override
 	public Tour updateTour(TourDTO newTour, Long id) {
 		Optional<Tour> tour = this.tourRepository.findById(id);
+		log.info("new tour lấy đươc : {}",newTour);
 		if(tour.isPresent()) {
 			Tour updatedTour = tour.get();
 
 			updatedTour.setTen_tour(newTour.getTen_tour());
-			updatedTour.setAnh_tour(newTour.getAnh_tour());
 			updatedTour.setLoai_tour(newTour.getLoai_tour());
 			updatedTour.setGia_tour(newTour.getGia_tour());
 			updatedTour.setGioi_thieu_tour(newTour.getGioi_thieu_tour());
-			updatedTour.setAnh_tour(newTour.getAnh_tour());
+			if(newTour.getAnh_tour()!=null) {
+				updatedTour.setAnh_tour(newTour.getAnh_tour());
+			}
 			updatedTour.setDiem_den(newTour.getDiem_den());
 			updatedTour.setNoi_dung_tour(newTour.getNoi_dung_tour());
 			updatedTour.setDiem_khoi_hanh(newTour.getDiem_khoi_hanh());

@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, Long>{
 				"WHERE ( :sdt IS NULL OR :sdt = '' OR u.sdt LIKE %:sdt% ) " +
 				"AND ( :email IS NULL OR :email = '' OR u.email LIKE %:email% ) " +
 				"AND ( :ho_ten IS NULL OR :ho_ten = '' OR u.ho_ten LIKE %:ho_ten% ) " +
-				"AND u.role !=0 " +
+				"AND u.role = 1 " +
 				" ORDER BY u.id desc")
 		Page<User> findAll(@Param("sdt") String sdt,@Param("email") String email,@Param("ho_ten") String ho_ten,Pageable pageable);
 	

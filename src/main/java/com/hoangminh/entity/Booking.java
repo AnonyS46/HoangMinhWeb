@@ -50,5 +50,4 @@ public class Booking {
     	this.booking_at = new Date();
     }
     
-    
 }

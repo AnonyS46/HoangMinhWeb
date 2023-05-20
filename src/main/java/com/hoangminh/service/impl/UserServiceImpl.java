@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Page<UserDTO> findAllUser(String sdt,String email,String ho_ten,Pageable pageable) {
 
-		Page<User> page = userRepository.findAll(pageable);
+		Page<User> page = userRepository.findAll(sdt,email,ho_ten,pageable);
 
 		Page<UserDTO> pageUserDTO = new PageImpl<>(
 			page.getContent().stream().map(user ->  {
@@ -215,6 +215,7 @@ public class UserServiceImpl implements UserService {
 		log.info("userCheck:{}",userCheck.getUsername());
 
 		if(BCrypt.checkpw(user.getPassword(), userCheck.getPassword()) && userCheck.getRole()==0) {
+
 			SessionUtilities.setAdmin(ConvertUserToDto.convertUsertoDto(userCheck));
 
 			log.info("userCheck:{}",SessionUtilities.getAdmin().getUsername());
@@ -227,13 +228,26 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean checkAdmin(UserDTO user) {
+	public boolean checkAdminLogin() {
 		return SessionUtilities.getAdmin()!=null;
 	}
 
 	@Override
 	public void adminLogout() {
 		SessionUtilities.setAdmin(null);
+	}
+
+	@Override
+	public boolean resetPass(Long id) {
+		User user = this.userRepository.findById(id).get();
+
+		user.setPassword(BCrypt.hashpw("123@123a", BCrypt.gensalt(10)));
+
+		if(this.userRepository.save(user)!=null) {
+			return true;
+		}
+
+		return false;
 	}
 
 

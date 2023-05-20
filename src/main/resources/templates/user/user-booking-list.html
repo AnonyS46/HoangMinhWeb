@@ -18,9 +18,7 @@
             rel="stylesheet">
 
     <!-- Font Awesome -->
-    <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
-            rel="stylesheet">
+    <link  href="/public/css/all.min.css"  rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
     <link href="../public/lib/owlcarousel/assets/owl.carousel.min.css"
@@ -123,7 +121,7 @@
                             <th class="col-lg-6" title="Click để xem chi tiết">
                                 <a th:href="@{/user/booking/{id}(id=${booking.id})}" th:text="${booking.ten_tour}">Du lịch biển nha trang thật tuyệt vời</a>
                             </th>
-                            <th class="col-lg-3" th:text="${#dates.format(booking.ngay_khoi_hanh, 'dd-MM-yyyy')}"></th>
+                            <th class="col-lg-3" th:text="${#dates.format(booking.booking_at, 'dd-MM-yyyy')}"></th>
                             <th class="col-lg-3" th:switch="${booking.trang_thai}">
                                 <p th:case="0">Đang xử lý</p>
                                 <p th:case="1">Đã thanh toán thành công</p>
@@ -250,9 +248,8 @@
 
 
 <!-- JavaScript Libraries -->
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script
-        src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+<script src="/public/js/boostrap-bundle.min.js"></script>
+<script src="/public/js/jquery.js"></script>
 <script src="../public/lib/easing/easing.min.js"></script>
 <script src="../public/lib/owlcarousel/owl.carousel.min.js"></script>
 <script src="../public/lib/tempusdominus/js/moment.min.js"></script>

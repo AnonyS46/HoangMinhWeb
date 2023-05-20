@@ -10,6 +10,7 @@ import com.hoangminh.entity.TourStart;
 import com.hoangminh.repository.TourStartRepository;
 import com.hoangminh.service.ImageService;
 import com.hoangminh.service.TourService;
+import com.hoangminh.service.UserService;
 import com.hoangminh.utilities.DateUtils;
 import com.hoangminh.utilities.FileUploadUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +40,9 @@ public class TourController {
     @Autowired
     private ImageService imageService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/getAllTour")
     public ResponseDTO getAllTour(@RequestParam(value="ten_tour",required = false) String ten_tour,
                                   @RequestParam(value="gia_tour_from",required = false) Long gia_tour_from,
@@ -48,14 +52,22 @@ public class TourController {
                                   @RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
                                   @RequestParam(value = "pageIndex") Integer pageIndex
                                                                                         ) {
+        if(!this.userService.checkAdminLogin()) {
+            return new ResponseDTO("Không có quyền truy cập",null);
+        }
 
-        Page<TourDTO> page = this.tourService.findAllTour(ten_tour,gia_tour_from,gia_tour_to,ngay_khoi_hanh,loai_tour, PageRequest.of(pageIndex,pageSize));
+        Page<TourDTO> page = this.tourService.findAllTourAdmin(ten_tour,gia_tour_from,gia_tour_to,ngay_khoi_hanh,loai_tour, PageRequest.of(pageIndex,pageSize));
 
         return new ResponseDTO("Thành công",page.getContent());
     }
 
     @GetMapping("/{id}")
     public ResponseDTO getOneTour(@PathVariable("id") Long id) {
+
+        if(!this.userService.checkAdminLogin()) {
+            return new ResponseDTO("Không có quyền truy cập",null);
+        }
+
         TourDTO tour = this.tourService.findTourById(id);
 
         if(tour!=null) {
@@ -66,6 +78,11 @@ public class TourController {
 
     @PostMapping("/test-up-anh")
     public ResponseDTO testUpAnh(@RequestParam("image")MultipartFile image) {
+
+        if(!this.userService.checkAdminLogin()) {
+            return new ResponseDTO("Không có quyền truy cập",null);
+        }
+
         String uploadDir = "HoangMinhWeb/src/main/resources/static/public/img";
 
         try {
@@ -83,6 +100,11 @@ public class TourController {
 
     @PostMapping("/add/image")
     public ResponseDTO createTourImage(@RequestParam("image")MultipartFile image) {
+
+        if(!this.userService.checkAdminLogin()) {
+            return new ResponseDTO("Không có quyền truy cập",null);
+        }
+
         String uploadDir = "HoangMinhWeb/src/main/resources/static/public/img";
 
         Tour tour = tourService.findFirstByOrderByIdDesc();
@@ -105,6 +127,10 @@ public class TourController {
     @PostMapping("/add")
     public ResponseDTO createTour(@RequestBody TourDTO tourDTO) {
 
+        if(!this.userService.checkAdminLogin()) {
+            return new ResponseDTO("Không có quyền truy cập",null);
+        }
+
         String[] dataGet = tourDTO.getDiem_den().split("/");
         tourDTO.setDiem_den(dataGet[0]);
         tourDTO.setNgay_khoi_hanh(DateUtils.convertStringToDate(dataGet[1]));
@@ -121,6 +147,11 @@ public class TourController {
 
     @PutMapping("/update/image/{id}")
     public ResponseDTO updateTourImage(@PathVariable("id") Long id,@RequestParam("image") MultipartFile image) {
+
+        if(!this.userService.checkAdminLogin()) {
+            return new ResponseDTO("Không có quyền truy cập",null);
+        }
+
         String uploadDir = "HoangMinhWeb/src/main/resources/static/public/img";
 
         TourDTO tourDTO = this.tourService.findTourById(id);
@@ -146,6 +177,10 @@ public class TourController {
     @PutMapping("/update/{id}")
     public ResponseDTO updateTour(@PathVariable("id") Long id,@RequestBody TourDTO tourDTO) {
 
+        if(!this.userService.checkAdminLogin()) {
+            return new ResponseDTO("Không có quyền truy cập",null);
+        }
+
         String[] dataGet = tourDTO.getDiem_den().split("/");
         tourDTO.setDiem_den(dataGet[0]);
         tourDTO.setNgay_khoi_hanh(DateUtils.convertStringToDate(dataGet[1]));
@@ -161,6 +196,10 @@ public class TourController {
     @DeleteMapping("/delete/{id}")
     public ResponseDTO deleteTour(@PathVariable("id") Long id) {
 
+        if(!this.userService.checkAdminLogin()) {
+            return new ResponseDTO("Không có quyền truy cập",null);
+        }
+
         if(this.tourService.findTourById(id)!=null) {
             if(this.tourService.deleteTour(id)) {
                 return new ResponseDTO("Xóa thành công",null);
@@ -172,12 +211,23 @@ public class TourController {
 
     @GetMapping("/getAllImageOfTour/{id}")
     public ResponseDTO getAllImageOfTour(@PathVariable("id") Long id) {
+
+        if(!this.userService.checkAdminLogin()) {
+            return new ResponseDTO("Không có quyền truy cập",null);
+        }
+
         return new ResponseDTO("Thành công",this.imageService.findByTourId(id));
     }
 
     @PostMapping("/add-image/{id}")
     public ResponseDTO addImage(@PathVariable("id") Long id,@RequestParam("image") MultipartFile image) {
+
+        if(!this.userService.checkAdminLogin()) {
+            return new ResponseDTO("Không có quyền truy cập",null);
+        }
+
         String uploadDir = "HoangMinhWeb/src/main/resources/static/public/img";
+
         try {
             // Lưu ảnh vào thư mục "upload"
             String fileName = UUID.randomUUID()+image.getOriginalFilename();
@@ -198,24 +248,44 @@ public class TourController {
 
     @GetMapping("/StartDate/{id}")
     public ResponseDTO getAllStartDate(@PathVariable("id") Long id) {
+
+        if(!this.userService.checkAdminLogin()) {
+            return new ResponseDTO("Không có quyền truy cập",null);
+        }
+
         return new ResponseDTO("Thành công",this.tourStartRepository.getDateStartByTourId(id));
     }
 
 
     @DeleteMapping("/StartDate/delete/{id}")
     public ResponseDTO deleteStartDate(@PathVariable("id") Long id) {
+
+        if(!this.userService.checkAdminLogin()) {
+            return new ResponseDTO("Không có quyền truy cập",null);
+        }
+
         this.tourStartRepository.deleteById(id);
         return new ResponseDTO("Xóa thành công",null);
     }
 
     @DeleteMapping("/TourImage/delete/{id}")
     public ResponseDTO deleteTourImage(@PathVariable("id") Long id) {
+
+        if(!this.userService.checkAdminLogin()) {
+            return new ResponseDTO("Không có quyền truy cập",null);
+        }
+
         this.imageService.deleteById(id);
+
         return new ResponseDTO("Xóa ảnh thành công",null);
     }
 
     @PostMapping("/add-date/{id}")
     public ResponseDTO addStartDate(@PathVariable("id") Long id , @RequestBody ToutStartAddDTO toutStartAddDTO) {
+
+        if(!this.userService.checkAdminLogin()) {
+            return new ResponseDTO("Không có quyền truy cập",null);
+        }
 
         Date ngay_khoi_hanh = DateUtils.convertStringToDate(toutStartAddDTO.getNgay_khoi_hanh());
 

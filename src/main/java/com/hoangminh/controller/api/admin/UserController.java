@@ -1,5 +1,6 @@
 package com.hoangminh.controller.api.admin;
 
+import com.hoangminh.dto.ChangePasswordDTO;
 import com.hoangminh.dto.ResponseDTO;
 import com.hoangminh.dto.UpdateUserDTO;
 import com.hoangminh.dto.UserDTO;
@@ -26,6 +27,9 @@ public class UserController {
             @RequestParam(value = "pageSize",defaultValue = "10") Integer pageSize,
             @RequestParam("pageIndex") Integer pageIndex
             ) {
+        if(!this.userService.checkAdminLogin()) {
+            return new ResponseDTO("Không có quyền truy cập",null);
+        }
 
         Page<UserDTO> page = this.userService.findAllUser(sdt,email,ho_ten, PageRequest.of(pageIndex,pageSize));
 
@@ -34,6 +38,11 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseDTO getOneUser(@PathVariable("id") Long id) {
+
+        if(!this.userService.checkAdminLogin()) {
+            return new ResponseDTO("Không có quyền truy cập",null);
+        }
+
         if(this.userService.findUserById(id)!=null) {
             return new ResponseDTO("Thành công", ConvertUserToDto.convertUsertoDto(this.userService.findUserById(id)));
         }
@@ -42,6 +51,10 @@ public class UserController {
 
     @PutMapping("/update/{id}")
     public ResponseDTO updateUser(@PathVariable("id") Long id, @RequestBody UpdateUserDTO updateUserDTO) {
+
+        if(!this.userService.checkAdminLogin()) {
+            return new ResponseDTO("Không có quyền truy cập",null);
+        }
 
         User user = this.userService.findUserById(id);
 
@@ -56,6 +69,11 @@ public class UserController {
     @DeleteMapping("/delete/{id}")
     public ResponseDTO deleteUser(@PathVariable("id") Long id){
 
+
+        if(!this.userService.checkAdminLogin()) {
+            return new ResponseDTO("Không có quyền truy cập",null);
+        }
+
         User user = this.userService.findUserById(id);
         if(user!=null) {
 
@@ -67,4 +85,17 @@ public class UserController {
         return new ResponseDTO("Không thể xóa người dùng này",null);
     }
 
+    @PutMapping("/update/resetPass/{id}")
+    public ResponseDTO resetPass(@PathVariable("id") Long id) {
+
+        if(!this.userService.checkAdminLogin()) {
+            return new ResponseDTO("Không có quyền truy cập",null);
+        }
+
+        if(this.userService.resetPass(id)) {
+            return new ResponseDTO("Khôi phục mật khẩu mặc định thành công",null);
+        }
+        return new ResponseDTO("Khôi phục mật khẩu mặc định thất bại",null);
+
+    }
 }

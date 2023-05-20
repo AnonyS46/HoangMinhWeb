@@ -23,6 +23,7 @@ public interface UserService {
 	public boolean changePassword(ChangePasswordDTO changePasswordDTO);
 	public boolean updateUserByAdmin(UpdateUserDTO updateUserDTO,Long id);
 	public boolean adminLogin(LoginDTO user);
-	public boolean checkAdmin(UserDTO user);
+	public boolean checkAdminLogin();
 	public void adminLogout();
+	public boolean resetPass(Long id);
 }

@@ -3,6 +3,7 @@ package com.hoangminh.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import com.hoangminh.dto.BookingDetailDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,7 +44,7 @@ public class BookingServiceImpl implements BookingService{
 	public boolean addNewBooking(BookingDTO newBooking) {
 
 
-		List<BookingDTO> checkBooking  = this.bookingRepository.findBookingByUserId(newBooking.getUser_id());
+		List<BookingDTO> checkBooking  = this.bookingRepository.checkBookingByUserId(newBooking.getUser_id());
 		if(checkBooking.size()>0) {
 			return false;
 		}
@@ -97,6 +98,11 @@ public class BookingServiceImpl implements BookingService{
 	@Override
 	public BookingDTO getBookingById(Long id) {
 		return this.bookingRepository.findBookingById(id);
+	}
+
+	@Override
+	public BookingDetailDTO getBookingDetailById(Long id) {
+		return this.bookingRepository.findBookingDetailById(id);
 	}
 
 }
